@@ -11,12 +11,20 @@ export default function SearchBar() {
 
 
 const handleSearch = () => {
-  navigate("/search?" + new URLSearchParams({
+  const searchParams = new URLSearchParams({
     date: date,
     startTime: startTime,
     holes: holes,
-    players: players
-  }).toString());
+    players: players,
+  }).toString();
+
+  // If already on the search page, force a re-render
+  if (window.location.pathname === "/search") {
+    navigate(`/search?${searchParams}`, { replace: true });
+    navigate(0); // Force a reload of the page
+  } else {
+    navigate(`/search?${searchParams}`);
+  }
 }
 
   return (
