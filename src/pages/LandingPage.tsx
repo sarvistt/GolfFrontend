@@ -1,6 +1,10 @@
 import SearchBar from "../components/SearchBar"
 
+
 export const LandingPage = () => {
+
+
+
     return (
         <div className="bg-[url('./we.png')] bg-cover bg-top">
             <div className="min-h-screen flex flex-col text-white">

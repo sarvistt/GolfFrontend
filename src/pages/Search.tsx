@@ -3,12 +3,12 @@ import { useState, useEffect } from "react"
 
 import LoadingScreen from "../components/LoadingScreen"
 import SearchBar from "../components/SearchBar"
-import SearchResult from "../components/SearchResult"
-import SortFields from "../components/SortFields"
+import Table from "../components/Table"
 
 export const Search = () => {
     const [searchParams] = useSearchParams();
     const [loading, setLoading] = useState(true);
+    const [fadeOut, setFadeOut] = useState(false);
 
     const date = searchParams.get("date") || new Date().toISOString().split("T")[0];
     const startTime = searchParams.get("startTime") || "6:00 am";
@@ -16,49 +16,49 @@ export const Search = () => {
     const players = searchParams.get("players") || "2";
 
     const mockData = [
-        {club: "Canoe Club", price: 50, time: "6:00 am"},
-        {club: "Mock Data 2", price: 60, time: "6:30 am"},
-        {club: "Mock Data 3", price: 70, time: "7:00 am"},
-        {club: "Mock Data 4", price: 80, time: "7:30 am"},
+        {club: "Canoe Club", price: 50, time: "6:00 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 2", price: 60, time: "6:30 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 3", price: 70, time: "7:00 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 4", price: 80, time: "7:30 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 4", price: 80, time: "7:30 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 4", price: 80, time: "7:30 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 4", price: 80, time: "7:30 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 4", price: 80, time: "7:30 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 4", price: 80, time: "7:30 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 4", price: 80, time: "7:30 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 4", price: 80, time: "7:30 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 4", price: 80, time: "7:30 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 4", price: 80, time: "7:30 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 4", price: 80, time: "7:30 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
+        {club: "Mock Data 4", price: 80, time: "7:30 am", url: "/course/canoe-club", tags: ['9 holes', '2 players']},
     ]
 
-
-
-    // Mimic API call start
-    const wait5seconds = () => {
-        return new Promise(resolve => setTimeout(resolve, 500)).then(() => {
-            setLoading(false)
-        });
-    }
     useEffect(() => {
-        wait5seconds();
+        const timer = setTimeout(() => {
+            setFadeOut(true);
+            setTimeout(() => setLoading(false), 500); // 500ms matches the fade duration
+        }, 1000);
+        return () => clearTimeout(timer);
     }, []);
-    // Mimic API call end
-
 
     return (
-        <div>
-            { loading ? <div> 
-                <LoadingScreen />
-            </div> 
-            
-            : 
-            <div className="p-6">
-                <div className="grid grid-cols-5 gap-4">
-                    <div className="col-span-5 bg-red-100 h-fit">
-                        <SearchBar />
-                    </div>
-                    <div className="col-span-5 bg-green-100 flex justify-center">3</div>
-                    <div className="col-span-5 row-span-3 bg-orange-100 flex flex-col items-center gap-4">
-                        {mockData.map((data, index) => {
-                            return (
-                                <SearchResult key={index} title={data.club} price={data.price} time={data.time}/>
-                            )
-                        })}
+        <div className="min-h-screen bg-[url('./we3.png')] bg-cover bg-top">
+            {loading ? (
+                <div className={`transition-opacity duration-500 ${fadeOut ? "opacity-0" : "opacity-100"}`}>
+                    <LoadingScreen />
+                </div>
+            ) : (
+                <div className="p-6 h-screen transition-opacity duration-500 opacity-100">
+                    <div className="flex flex-col">
+                        <div className="mb-4">
+                            <SearchBar initialDate={date} initialStartTime={startTime} initialHoles={holes} initialPlayers={players}  />
+                        </div>
+                        <div className="w-full flex flex-col items-center rounded-lg p-4">
+                            <Table data={mockData} />
+                        </div>
                     </div>
                 </div>
-            </div>}
-            
+            )}
         </div>
-    )
+    );
 }
