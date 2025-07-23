@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from "react-route
 import { AnimatePresence, motion } from "framer-motion"
 import {LandingPage} from "./pages/LandingPage"
 import {Search} from "./pages/Search"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -42,9 +44,12 @@ function AnimatedRoutes() {
 
 
 export default function App() {
+   const queryClient = new QueryClient();
   return (
+    <QueryClientProvider client={queryClient}>
     <Router>
       <AnimatedRoutes />
     </Router>
+    </QueryClientProvider>
   );
 }

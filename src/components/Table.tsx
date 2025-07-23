@@ -41,7 +41,6 @@ export default function Table({ data }: { data: any[] }) {
         {
             header: "Price",
             accessorKey: "price",
-            cell: ({ getValue }) => `$${getValue()}`,
         },
         {
             header: "Tee Time",

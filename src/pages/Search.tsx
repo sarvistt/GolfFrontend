@@ -5,9 +5,12 @@ import LoadingScreen from "../components/LoadingScreen"
 import SearchBar from "../components/SearchBar"
 import Table from "../components/Table"
 
+import { useGolfApi } from "../hooks/useGolfApi"
+
 export const Search = () => {
+    const {data, isLoading} = useGolfApi<any[]>()
+
     const [searchParams] = useSearchParams();
-    const [loading, setLoading] = useState(true);
     const [fadeOut, setFadeOut] = useState(false);
 
     const date = searchParams.get("date") || new Date().toISOString().split("T")[0];
@@ -34,16 +37,16 @@ export const Search = () => {
     ]
 
     useEffect(() => {
-        const timer = setTimeout(() => {
+        if (!isLoading) {
             setFadeOut(true);
-            setTimeout(() => setLoading(false), 500); // 500ms matches the fade duration
-        }, 1000);
-        return () => clearTimeout(timer);
-    }, []);
+        } else {
+            setFadeOut(false);
+        }
+    }, [isLoading]);
 
     return (
         <div className="min-h-screen bg-[url('./we3.png')] bg-cover bg-top">
-            {loading ? (
+            {isLoading ? (
                 <div className={`transition-opacity duration-500 ${fadeOut ? "opacity-0" : "opacity-100"}`}>
                     <LoadingScreen />
                 </div>
@@ -54,7 +57,7 @@ export const Search = () => {
                             <SearchBar initialDate={date} initialStartTime={startTime} initialHoles={holes} initialPlayers={players}  />
                         </div>
                         <div className="w-full flex flex-col items-center rounded-lg p-4">
-                            <Table data={mockData} />
+                            <Table data={data} />
                         </div>
                     </div>
                 </div>
